@@ -435,7 +435,7 @@ select {
 
 .hero-visual {
   position: relative;
-  min-height: 640px;
+  min-height: 500px;
   border-radius: 34px;
   overflow: hidden;
   border: 1px solid rgba(198, 214, 229, 0.12);
@@ -457,132 +457,23 @@ select {
   opacity: 0.75;
 }
 
-.hero-mark-stage {
+.hero-photo-stage {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
   padding: 26px;
-  perspective: 1200px;
 }
 
-.hero-mark-card {
-  width: min(420px, 72vw);
-  aspect-ratio: 1;
-  display: grid;
-  place-items: center;
-  gap: 10px;
-  padding: 26px;
-  position: relative;
-  border-radius: 34px;
-  background:
-    radial-gradient(circle at 50% 30%, rgba(217, 231, 246, 0.2), transparent 34%),
-    linear-gradient(180deg, rgba(18, 27, 40, 0.86), rgba(6, 10, 16, 0.92));
-  border: 1px solid rgba(233, 240, 248, 0.12);
-  box-shadow:
-    0 34px 90px rgba(0, 0, 0, 0.42),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transform-style: preserve-3d;
-  animation: float 8s ease-in-out infinite;
-}
-
-.hero-mark-card::before {
-  content: "";
-  position: absolute;
-  inset: 14px;
-  border-radius: 28px;
-  border: 1px solid rgba(233, 240, 248, 0.1);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 28%, rgba(255, 255, 255, 0.03) 72%, transparent);
-}
-
-.hero-mark-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 30% 28%, rgba(217, 231, 246, 0.16), transparent 12%),
-    radial-gradient(circle at 74% 70%, rgba(211, 179, 122, 0.12), transparent 12%);
-  mix-blend-mode: screen;
-}
-
-.hero-mark-image {
-  position: relative;
-  width: min(68%, 250px);
-  aspect-ratio: 1;
-  object-fit: contain;
-  filter:
-    drop-shadow(0 18px 26px rgba(0, 0, 0, 0.28))
-    saturate(1.03)
-    contrast(1.02);
-  z-index: 1;
-  transform: translateZ(38px);
-}
-
-.hero-mark-ribbon {
-  position: absolute;
-  left: 50%;
-  top: 24px;
-  transform: translateX(-50%);
-  z-index: 1;
-  padding: 10px 14px;
-  border-radius: 999px;
-  color: var(--accent-strong);
-  border: 1px solid rgba(223, 233, 242, 0.14);
-  background: rgba(8, 12, 18, 0.55);
-  backdrop-filter: blur(10px);
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.hero-mark-caption {
-  position: absolute;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  z-index: 1;
-  color: var(--muted);
-  font-size: 0.82rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.floating-card {
-  position: absolute;
-  padding: 18px 18px 16px;
-  border-radius: 20px;
-  border: 1px solid var(--line);
-  background: rgba(6, 10, 16, 0.72);
-  backdrop-filter: blur(14px);
-  box-shadow: var(--shadow);
-}
-
-.floating-card span {
+.hero-photo-image {
+  width: 100%;
+  max-width: min(100%, 560px);
+  height: auto;
   display: block;
-  color: var(--muted);
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-
-.floating-card strong {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 1.1rem;
-}
-
-.floating-card.card-left {
-  left: 28px;
-  bottom: 90px;
-  max-width: 180px;
-}
-
-.floating-card.card-right {
-  right: 28px;
-  top: 92px;
-  max-width: 200px;
+  border-radius: 28px;
+  object-fit: cover;
+  object-position: center center;
+  box-shadow: none;
 }
 
 /* Cards */
@@ -1040,16 +931,6 @@ select {
   transform: translateY(0);
 }
 
-/* Animations */
-@keyframes float {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) rotateX(4deg) rotateY(-8deg);
-  }
-  50% {
-    transform: translate3d(0, -12px, 0) rotateX(0deg) rotateY(8deg);
-  }
-}
-
 /* Responsive */
 @media (max-width: 1120px) {
   .hero-grid,
@@ -1060,12 +941,13 @@ select {
   }
 
   .hero-visual {
-    min-height: 520px;
+    min-height: 400px;
   }
 
   .banner-graphic {
     width: 60%;
   }
+
 }
 
 @media (max-width: 920px) {
@@ -1166,16 +1048,8 @@ select {
   }
 
   .hero-visual {
-    min-height: 420px;
+    min-height: 320px;
     border-radius: 26px;
-  }
-
-  .core {
-    width: min(320px, 74vw);
-  }
-
-  .floating-card {
-    display: none;
   }
 
   .hero-actions,
