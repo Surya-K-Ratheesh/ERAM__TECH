@@ -6,6 +6,7 @@
   const productLinks = Array.from(document.querySelectorAll("[data-product-link]"));
   const dropdownItems = Array.from(document.querySelectorAll("[data-products-dropdown]"));
   const mobileToggle = document.querySelector("[data-nav-toggle]");
+  const mobileButton = document.querySelector("[data-nav-button]");
   const yearNode = document.querySelector("[data-year]");
   const revealNodes = Array.from(document.querySelectorAll(".reveal"));
   const form = document.querySelector("[data-contact-form]");
@@ -56,6 +57,18 @@
   if (mobileToggle) {
     mobileToggle.addEventListener("change", () => {
       if (!mobileToggle.checked) closeDropdowns();
+    });
+  }
+
+  if (mobileToggle && mobileButton) {
+    mobileButton.addEventListener("click", (event) => {
+      if (window.matchMedia("(max-width: 920px)").matches) {
+        event.preventDefault();
+        mobileToggle.checked = !mobileToggle.checked;
+        if (!mobileToggle.checked) {
+          closeDropdowns();
+        }
+      }
     });
   }
 

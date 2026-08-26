@@ -220,7 +220,16 @@ select {
 }
 
 .nav-toggle {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .nav-button {
@@ -235,6 +244,9 @@ select {
   justify-content: center;
   gap: 6px;
   cursor: pointer;
+  position: relative;
+  z-index: 60;
+  touch-action: manipulation;
 }
 
 .nav-button span {
@@ -971,6 +983,7 @@ select {
     transition: transform 0.26s ease, opacity 0.26s ease;
     max-height: calc(100vh - var(--nav-height));
     overflow: auto;
+    overscroll-behavior: contain;
   }
 
   .nav-toggle:checked ~ .nav {
@@ -991,17 +1004,38 @@ select {
     width: 100%;
   }
 
+  .nav-item-dropdown {
+    display: grid;
+    width: 100%;
+  }
+
+  .nav-item-dropdown > .dropdown-trigger {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
   .dropdown-menu {
     position: static;
     visibility: visible;
     opacity: 1;
     transform: none;
     display: none;
-    margin-top: 8px;
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.03);
   }
 
   .nav-item-dropdown.open .dropdown-menu {
     display: grid;
+    gap: 6px;
+  }
+
+  .dropdown-menu a {
+    width: 100%;
+    white-space: normal;
+    line-height: 1.35;
   }
 
   .nav-cta {
