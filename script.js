@@ -9,8 +9,8 @@
   const yearNode = document.querySelector("[data-year]");
   const revealNodes = Array.from(document.querySelectorAll(".reveal"));
   const form = document.querySelector("[data-contact-form]");
-  const heroScene = document.querySelector("[data-hero-scene]");
   const heroVisual = document.querySelector("[data-hero-visual]");
+  const heroCard = document.querySelector("[data-hero-card]");
 
   if (yearNode) {
     yearNode.textContent = new Date().getFullYear();
@@ -111,7 +111,7 @@
     });
   }
 
-  if (heroScene && heroVisual) {
+  if (heroCard && heroVisual) {
     let rafId = null;
 
     const onMove = (event) => {
@@ -121,12 +121,12 @@
 
       if (rafId) cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
-        heroScene.style.transform = `rotateX(${8 - y * 16}deg) rotateY(${x * 18}deg)`;
+        heroCard.style.transform = `rotateX(${8 - y * 10}deg) rotateY(${x * 14}deg) translateY(${y * -4}px)`;
       });
     };
 
     const reset = () => {
-      heroScene.style.transform = "";
+      heroCard.style.transform = "";
     };
 
     heroVisual.addEventListener("pointermove", onMove);
