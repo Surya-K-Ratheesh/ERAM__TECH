@@ -126,8 +126,7 @@ p {
 }
 
 .site-header.is-scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
+  background: #ffffff;
   border-bottom: 1px solid var(--line);
 }
 
