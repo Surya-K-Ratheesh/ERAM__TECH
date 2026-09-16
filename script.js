@@ -12,6 +12,21 @@
   const normalizePath = (p) => p.replace(/\/+$/, "") || "/";
   const matches = (t) => normalizePath(t) === currentPath;
 
+  const header = document.querySelector(".site-header");
+  if (header) {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        header.classList.add("is-scrolled");
+      } else {
+        header.classList.remove("is-scrolled");
+      }
+    });
+    // Check initial state
+    if (window.scrollY > 50) {
+      header.classList.add("is-scrolled");
+    }
+  }
+
   pageLinks.forEach((link) => {
     const href = link.getAttribute("href");
     if (href && matches(href)) {
