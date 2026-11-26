@@ -46,7 +46,9 @@ async function start() {
   softbox.geometry.dispose(); softbox.material.dispose();
   darkbox.geometry.dispose(); darkbox.material.dispose();
 
-  const metal = new THREE.MeshStandardMaterial({ color: 0xa9b6ad, metalness: 0.88, roughness: 0.27 });
+  const metal = new THREE.MeshStandardMaterial({ color: 0x303944, metalness: 0.88, roughness: 0.27 });
+  const doorSkin = new THREE.MeshStandardMaterial({ color: 0x46515f, metalness: 0.25, roughness: 0.57 });
+  const recess = new THREE.MeshStandardMaterial({ color: 0x10171e, metalness: 0.25, roughness: 0.65 });
   const inset = new THREE.MeshStandardMaterial({ color: 0x35473c, roughness: 0.5, metalness: 0.45 });
   const stone = new THREE.MeshStandardMaterial({ color: 0xe7e2d5, roughness: 0.94 });
   const plinth = new THREE.MeshStandardMaterial({ color: 0xe1e1d5, roughness: 0.87 });
@@ -74,20 +76,28 @@ async function start() {
   const joint = new THREE.MeshStandardMaterial({ color: 0xbdbbad, roughness: 1 });
   [0.94, 1.8, 2.66].forEach(y => box(0.954, 0.012, 0.407, -1.64, y, -0.25, joint));
   for (let i = 0; i < 6; i++) box(0.09, 3.5, 0.4, 0.9 + i * 0.17, 1.83, -0.25, metal);
-  // Entrance frame, recessed seals, fixed sidelight and a separately pivoting leaf.
+  // Reference door: left sidelight, solid leaf and a full-height recessed pull.
   box(2.0, 0.11, 0.19, -0.15, 3.43, 0.05, metal);
   box(2.0, 0.085, 0.19, -0.15, 0.2, 0.05, metal);
   [-1.1, 0.82].forEach(x => box(0.095, 3.27, 0.19, x, 1.82, 0.05, metal));
-  box(0.055, 3.1, 0.11, 0.43, 1.82, 0.05, inset);
-  box(0.31, 3.07, 0.025, 0.62, 1.82, 0.07, glass);
+  box(0.055, 3.1, 0.11, -0.70, 1.82, 0.05, metal);
+  box(0.29, 3.07, 0.025, -0.89, 1.82, 0.07, glass);
   const hinge = new THREE.Group();
-  hinge.position.set(-1.03, 0.25, 0.09);
+  hinge.position.set(-0.66, 0.25, 0.09);
   model.add(hinge);
-  [0.045, 1.39].forEach(x => box(0.075, 3.12, 0.10, x, 1.56, 0, metal, hinge));
-  [0.04, 3.08].forEach(y => box(1.42, 0.08, 0.10, 0.71, y, 0, metal, hinge));
-  box(1.29, 2.94, 0.018, 0.72, 1.56, 0.015, glass, hinge);
-  box(0.035, 0.78, 0.05, 1.26, 1.48, 0.13, metal, hinge);
-  [1.15, 1.80].forEach(y => box(0.035, 0.035, 0.1, 1.26, y, 0.075, metal, hinge));
+  box(1.40, 3.12, 0.035, 0.70, 1.56, -0.06, doorSkin, hinge);
+  box(0.91, 3.12, 0.11, 0.455, 1.56, 0.005, doorSkin, hinge);
+  box(0.32, 3.12, 0.11, 1.24, 1.56, 0.005, doorSkin, hinge);
+  box(0.17, 3.0, 0.012, 0.995, 1.56, -0.035, recess, hinge);
+  [0.03, 3.09].forEach(y => box(0.17, 0.06, 0.11, 0.995, y, 0.005, doorSkin, hinge));
+  box(0.018, 3.0, 0.075, 1.071, 1.56, 0.01, inset, hinge);
+  const lock = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.015, 20), inset);
+  lock.rotation.x = Math.PI / 2;
+  lock.position.set(1.31, 1.46, 0.075);
+  lock.castShadow = true;
+  hinge.add(lock);
+  const keyMetal = new THREE.MeshStandardMaterial({ color: 0xc8c4b9, metalness: 0.8, roughness: 0.3 });
+  box(0.012, 0.032, 0.007, 1.31, 1.46, 0.086, keyMetal, hinge);
   // A return of glazing makes the model legible in three dimensions.
   box(0.065, 3.22, 0.065, 1.93, 1.77, -1.18, metal);
   box(0.065, 3.22, 0.065, 1.93, 1.77, 0.4, metal);
@@ -96,7 +106,7 @@ async function start() {
   box(0.025, 3.1, 1.5, 1.93, 1.77, -0.39, glass);
 
   // Render on demand: animations settle and stop instead of running an idle loop.
-  let angle = 21, targetAngle = 21, door = -0.23, targetDoor = -0.23;
+  let angle = 21, targetAngle = 21, door = 0, targetDoor = 0;
   let frame = 0, visible = true;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   function render() {
@@ -123,12 +133,13 @@ async function start() {
   resize.observe(viewport);
   new IntersectionObserver(entries => { visible = entries[0].isIntersecting; if (visible) requestRender(); }, {rootMargin:'80px'}).observe(viewport);
   document.addEventListener('visibilitychange', requestRender);
-  const finishes = { silver: [0xa9b6ad, 'Brushed silver'], graphite: [0x3b4740, 'Graphite'], champagne: [0xb49a70, 'Champagne'] };
+  const finishes = { silver: [0xa9b6ad, 'Brushed silver', 0xb6bebc], graphite: [0x303944, 'Graphite', 0x46515f], champagne: [0xb49a70, 'Champagne', 0xbfa983] };
   finishButtons.forEach(button => {
     button.disabled = false;
     button.addEventListener('click', () => {
-      const [color, name] = finishes[button.dataset.finish];
+      const [color, name, panelColor] = finishes[button.dataset.finish];
       metal.color.setHex(color);
+      doorSkin.color.setHex(panelColor);
       finishButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
       document.querySelector('[data-finish-name]').textContent = name;
       viewport.dataset.finish = button.dataset.finish;
@@ -140,7 +151,7 @@ async function start() {
     const open = doorButton.getAttribute('aria-pressed') !== 'true';
     doorButton.setAttribute('aria-pressed', String(open));
     doorButton.textContent = open ? 'Close entrance' : 'Open entrance';
-    targetDoor = open ? -1.2 : -0.23;
+    targetDoor = open ? -1.2 : 0;
     requestRender();
   });
   rotation.addEventListener('input', () => { targetAngle = Number(rotation.value); requestRender(); });
@@ -167,7 +178,7 @@ async function start() {
     visible = false;
   });
   viewport.dataset.ready = 'true';
-  viewport.dataset.finish = 'silver';
+  viewport.dataset.finish = 'graphite';
   status.textContent = 'Concept visualization. Finishes and details are illustrative.';
   requestRender();
 }

@@ -88,8 +88,10 @@ const assert = (condition, message) => { if (!condition) throw new Error(message
     assert(await processDetail.getAttribute('open') !== null, 'Process disclosure failed');
     await page.locator('[data-scene]').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => document.querySelector('[data-scene]').dataset.ready === 'true');
+    assert(await page.locator('[data-scene]').getAttribute('data-finish') === 'graphite', 'Reference door must start in graphite');
+    assert(await page.locator('button[data-finish="graphite"]').getAttribute('aria-pressed') === 'true', 'Default finish control must match the model');
     for (const finish of ['graphite','champagne','silver']) {
-      await page.locator('[data-finish="' + finish + '"]').click();
+      await page.locator('button[data-finish="' + finish + '"]').click();
       assert(await page.locator('[data-scene]').getAttribute('data-finish') === finish, '3D finish failed');
     }
     await page.locator('[data-door]').click();
@@ -107,6 +109,7 @@ const assert = (condition, message) => { if (!condition) throw new Error(message
     await page.mouse.up();
     assert(await page.locator('[data-rotation]').inputValue() !== '21', 'Dragging must rotate the model');
     await page.locator('[data-reset-view]').click();
+    await page.locator('button[data-finish="graphite"]').click();
     await page.evaluate(() => scrollTo(0,0));
     for(const [name,width,height] of [['desktop',1440,1000],['mobile',390,844]]) {
       await page.setViewportSize({width,height});
